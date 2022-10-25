@@ -1,17 +1,12 @@
 {
   "private": true,
   "workspaces": [
-    "packages/*"
+    "plugins",
+    "apps/**"
   ],
   "scripts": {
     "lint": "eslint . --ext .js,.ts",
     "test": "jest --config integration/jest.config.js"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -e",
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,ts}": [
