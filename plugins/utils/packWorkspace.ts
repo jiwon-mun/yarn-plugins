@@ -18,9 +18,9 @@ export default async function packWorkspace({
 
     try {
       for (const file of files) {
+        if(file === 'package.json') continue;
         const src = ppath.join(workspace.cwd, file);
         const dest = ppath.join(destination, workspace.relativeCwd, file);
-
         report.reportInfo(null, file);
         await xfs.copyPromise(dest, src, { overwrite: true });
         progress.tick();

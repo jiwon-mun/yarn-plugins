@@ -15,10 +15,19 @@ export default async function copyManifests({
     const dest = ppath.join(destination, path);
     const data = {};
 
+
     ws.manifest.exportTo(data);
+    
+    //@ts-ignore
+    delete data['devDependencies']
+
+    //@ts-ignore
+    console.log("data", data['devDependencies'])
+
 
     report.reportInfo(null, path);
     await xfs.mkdirpPromise(ppath.dirname(dest));
-    await xfs.writeJsonPromise(dest, data);
+    console.log("dest",dest)
+    const r = await xfs.writeJsonPromise(dest, data);
   }
 }

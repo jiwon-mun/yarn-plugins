@@ -131,11 +131,6 @@ export default class DockerBuildCommand extends BaseCommand {
               report,
             });
 
-            await copyManifests({
-              destination: manifestDir,
-              workspaces: project.workspaces,
-              report,
-            });
 
             await copyProtocolFiles({
               destination: manifestDir,
@@ -181,7 +176,8 @@ export default class DockerBuildCommand extends BaseCommand {
                 report,
               });
             }
-          });
+
+
 
           for (const ws of requiredWorkspaces) {
             const name = ws.manifest.name
@@ -199,6 +195,13 @@ export default class DockerBuildCommand extends BaseCommand {
               },
             );
           }
+
+          await copyManifests({
+            destination: manifestDir,
+            workspaces: project.workspaces,
+            report,
+          });
+        });
 
           await execUtils.pipevp(
             'docker',
