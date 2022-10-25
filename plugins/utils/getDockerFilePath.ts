@@ -1,25 +1,17 @@
-import { Workspace } from '@yarnpkg/core';
-import { PortablePath, toFilename, ppath, xfs } from '@yarnpkg/fslib';
+import { PortablePath, ppath, xfs, npath } from '@yarnpkg/fslib';
 
+// https://github.com/Dcard/yarn-plugins/issues/33
 export default async function getDockerFilePath(
-  workspace: Workspace,
+  cwd: string,
   filename = 'Dockerfile',
 ): Promise<PortablePath> {
-  const path = toFilename(filename);
+  const baseDir = npath.toPortablePath(cwd);
+  const path = npath.toPortablePath(filename);
 
-  if (ppath.isAbsolute(path)) {
-    return path;
-  }
+  const candidate = ppath.join(baseDir, path);
 
-  const candidates = [
-    ppath.join(workspace.cwd, path),
-    ppath.join(workspace.project.cwd, path),
-  ];
-
-  for (const candidate of candidates) {
-    if (await xfs.existsPromise(candidate)) {
-      return candidate;
-    }
+  if (await xfs.existsPromise(candidate)) {
+    return candidate;
   }
 
   throw new Error('Dockerfile is required');

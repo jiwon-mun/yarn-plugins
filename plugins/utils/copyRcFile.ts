@@ -12,6 +12,8 @@ export default async function copyRcFile({
 }): Promise<void> {
   const filename = project.configuration.get('rcFilename');
 
+  console.log('project.cwd', project.cwd);
+
   report.reportInfo(null, filename);
   await xfs.copyPromise(
     ppath.join(destination, filename),
