@@ -155,6 +155,7 @@ export default class DockerBuildCommand extends BaseCommand {
               },
             });
 
+     
             await copyCacheMarkedFiles({
               destination: manifestDir,
               project,
@@ -177,13 +178,20 @@ export default class DockerBuildCommand extends BaseCommand {
               });
             }
 
+       
+            await copyManifests({
+              destination: manifestDir,
+              workspaces: project.workspaces,
+              report,
+            });
+          });
+  
 
 
           for (const ws of requiredWorkspaces) {
             const name = ws.manifest.name
               ? structUtils.stringifyIdent(ws.manifest.name)
               : '';
-
             await report.startTimerPromise(
               `Pack workspace ${name}`,
               async () => {
@@ -195,13 +203,6 @@ export default class DockerBuildCommand extends BaseCommand {
               },
             );
           }
-
-          await copyManifests({
-            destination: manifestDir,
-            workspaces: project.workspaces,
-            report,
-          });
-        });
 
           await execUtils.pipevp(
             'docker',
